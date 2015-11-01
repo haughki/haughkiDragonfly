@@ -3,18 +3,18 @@
 # (c) Copyright 2007, 2008 by Christo Butcher
 # Licensed under the LGPL.
 #
-#   Dragonfly is free software: you can redistribute it and/or modify it 
-#   under the terms of the GNU Lesser General Public License as published 
-#   by the Free Software Foundation, either version 3 of the License, or 
+#   Dragonfly is free software: you can redistribute it and/or modify it
+#   under the terms of the GNU Lesser General Public License as published
+#   by the Free Software Foundation, either version 3 of the License, or
 #   (at your option) any later version.
 #
-#   Dragonfly is distributed in the hope that it will be useful, but 
-#   WITHOUT ANY WARRANTY; without even the implied warranty of 
-#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU 
+#   Dragonfly is distributed in the hope that it will be useful, but
+#   WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 #   Lesser General Public License for more details.
 #
-#   You should have received a copy of the GNU Lesser General Public 
-#   License along with Dragonfly.  If not, see 
+#   You should have received a copy of the GNU Lesser General Public
+#   License along with Dragonfly.  If not, see
 #   <http://www.gnu.org/licenses/>.
 #
 
@@ -38,13 +38,14 @@ _info      = logging.INFO
 _warning   = logging.WARNING
 _error     = logging.ERROR
 _critical  = logging.CRITICAL
+# following log levels correspond to:  (stdout, file)
 default_levels = {
                   "":                     (_warning, _warning),
-                  "engine":               (_warning, _info), 
-                  "engine.compiler":      (_warning, _info), 
+                  "engine":               (_warning, _info),
+                  "engine.compiler":      (_warning, _info),
                   "engine.timer":         (_warning, _info),
-                  "grammar":              (_warning, _critical), 
-                  "grammar.load":         (_warning, _info), 
+                  "grammar":              (_warning, _critical),
+                  "grammar.load":         (_warning, _info),
                   "grammar.begin":        (_info, _info),
                   "grammar.results":      (_warning, _warning),
                   "grammar.decode":       (_warning, _info),
@@ -119,7 +120,7 @@ def _setup_stdout_handler():
 
     stdout_handler = logging.StreamHandler(_OutputStream(sys.stdout.write))
     stdout_handler.setLevel(logging.DEBUG)
-    formatter = logging.Formatter("%(name)s: %(message)s")
+    formatter = logging.Formatter("%(name)s: %(filename)s:%(lineno)s - %(funcName)30s() - %(message)s")
     stdout_handler.setFormatter(formatter)
     return stdout_handler
 
@@ -132,10 +133,9 @@ def _setup_file_handler():
         #  to log Dragonfly messages.
         mydocs_pidl = shell.SHGetFolderLocation(0, shellcon.CSIDL_PERSONAL, 0, 0)
         mydocs_path = shell.SHGetPathFromIDList(mydocs_pidl)
-        log_file_path = os.path.join(mydocs_path, "dragonfly.txt")
+        log_file_path = os.path.join(mydocs_path, "dragonfly.log")
         _file_handler = logging.FileHandler(log_file_path)
-        formatter = logging.Formatter("%(asctime)s %(name)s (%(levelname)s):"
-                                  " %(message)s" + repr(_file_handler))
+        formatter = logging.Formatter("%(asctime)s %(name)15s (%(levelname)8s): %(filename)20s:%(lineno)4s - %(funcName)30s() - %(message)s - " + repr(_file_handler))
         _file_handler.setFormatter(formatter)
     return _file_handler
 
