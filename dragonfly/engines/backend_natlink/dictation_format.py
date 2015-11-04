@@ -348,7 +348,7 @@ class WordParserDns11(WordParserBase):
         elif property.startswith("right-"):
             flags = self.property_map["right-*"].clone()
         else:
-            self._log.warning("Unknown word property: %r" % (property,))
+            self._log.warning("Unknown word property: %r" % (property,), exc_info=True)
             flags = WordFlags()
         return flags
 

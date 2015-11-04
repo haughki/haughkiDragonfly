@@ -54,7 +54,7 @@ class NatlinkEngine(EngineBase):
         try:
             import natlink
         except ImportError:
-            self._log.error("%s: failed to import natlink module." % self)
+            self._log.error("%s: failed to import natlink module." % self, exc_info=True)
             raise EngineError("Failed to import the Natlink module.")
         self.natlink = natlink
 
@@ -219,7 +219,7 @@ class NatlinkEngine(EngineBase):
             tag = self._language_tags[language]
             tag = tag[0]
         except KeyError:
-            self._log.error("Unknown speaker language: 0x%04x" % language)
+            self._log.error("Unknown speaker language: 0x%04x" % language, exc_info=True)
             raise GrammarError("Unknown speaker language: 0x%04x" % language)
         return tag
 
@@ -295,6 +295,4 @@ class GrammarWrapper(object):
                     r.process_recognition(root)
                     return
 
-        NatlinkEngine._log.warning("Grammar %s: failed to decode"
-                                   " recognition %r."
-                                   % (self.grammar._name, words))
+        NatlinkEngine._log.warning("Grammar %s: failed to decode recognition %r." % (self.grammar._name, words), exc_info=True)

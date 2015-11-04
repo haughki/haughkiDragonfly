@@ -120,7 +120,7 @@ class EngineBase(object):
     def load_grammar(self, grammar):
         wrapper_key = id(grammar)
         if wrapper_key in self._grammar_wrappers:
-            self._log.warning("Grammar %s loaded multiple times." % grammar)
+            self._log.warning("Grammar %s loaded multiple times." % grammar, exc_info=True)
             return
 
         wrapper = self._load_grammar(grammar)

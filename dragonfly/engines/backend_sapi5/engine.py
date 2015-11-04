@@ -211,19 +211,19 @@ class Sapi5SharedEngine(EngineBase):
         message_pointer = pointer(message)
 
         while (not timeout) or (time.time() - begin_time < timeout):
-            self._log.error("loop")
+            self._log.error("loop", exc_info=True)
             if windll.user32.GetMessageW(message_pointer, NULL, 0, 0) == 0:
                 msg = str(WinError())
-                self._log.error("GetMessageW() failed: %s" % msg)
+                self._log.error("GetMessageW() failed: %s" % msg, exc_info=True)
                 raise EngineError("GetMessageW() failed: %s" % msg)
 
             if message.message == win32con.WM_TIMER:
-                self._log.error("loop, timeout")
+                self._log.error("loop, timeout", exc_info=True)
                 # A timer message means this loop has timed out.
                 timed_out = True
                 break
             else:
-                self._log.error("loop, dispatch")
+                self._log.error("loop, dispatch", exc_info=True)
                 # Process other messages as normal.
                 windll.user32.TranslateMessage(message_pointer)
                 windll.user32.DispatchMessageW(message_pointer)
@@ -442,10 +442,7 @@ class GrammarWrapper(object):
         # If this point is reached, then the recognition was not
         #  processed successfully..
 
-        self.engine._log.error("Grammar %s: failed to decode"
-                               " recognition %r."
-                               % (self.grammar._name,
-                                  [r[0] for r in results]))
+        self.engine._log.error("Grammar %s: failed to decode recognition %r." % (self.grammar._name, [r[0] for r in results]), exc_info=True)
 
     def recognition_other_callback(self, StreamNumber, StreamPosition):
             func = getattr(self.grammar, "process_recognition_other", None)

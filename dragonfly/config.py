@@ -262,8 +262,7 @@ class Config(object):
                 if include_all:
                     relevant_frames.append(frame)
 
-            self._log.error("An error occurred in the %s file at line %s."
-                            % (path, error_line))
+            self._log.error("An error occurred in the %s file at line %s." % (path, error_line))
             self._log.error("The error message was: %s" % e)
             formatted = traceback.format_list(relevant_frames)
             lines = "\n".join(formatted).splitlines()

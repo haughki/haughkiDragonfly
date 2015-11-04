@@ -98,9 +98,7 @@ class ConnectionGrammar(Grammar):
             self._application = Dispatch(self._app_name)
         except com_error, e:
             if self._log_begin:
-                self._log_begin.warning("Grammar %s: failed to"
-                                        " connect to %r: %s."
-                                        % (self, self._app_name, e))
+                self._log_begin.warning("Grammar %s: failed to connect to %r: %s." % (self, self._app_name, e), exc_info=True)
             return False
         else:
             [r.activate() for r in self._rules if not r.active]
