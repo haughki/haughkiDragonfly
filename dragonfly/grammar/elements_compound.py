@@ -241,17 +241,17 @@ class Compound(elements_.Alternative):
             mapping = {}
             for element in extras:
                 if not isinstance(element, elements_.ElementBase):
-                    self._log.error("Invalid extras item: %s" % element)
+                    self._log.error("Invalid extras item: %s" % element, exc_info=True)
                     raise TypeError("Invalid extras item: %s" % element)
                 if not element.name:
-                    self._log.error("Extras item does not have a name: %s" % element)
+                    self._log.error("Extras item does not have a name: %s" % element, exc_info=True)
                     raise TypeError("Extras item does not have a name: %s" % element)
                 if element.name in mapping:
-                    self._log.warning("Multiple extras items with the same name: %s" % element)
+                    self._log.warning("Multiple extras items with the same name: %s" % element, exc_info=True)
                 mapping[element.name] = element
             extras = mapping
         elif not isinstance(extras, dict):
-            self._log.error("Invalid extras argument: %s" % extras)
+            self._log.error("Invalid extras argument: %s" % extras, exc_info=True)
             raise TypeError("Invalid extras argument: %s" % extras)
 
         # Temporary transition code so that both "elements" and "extras"
@@ -269,7 +269,7 @@ class Compound(elements_.Alternative):
 
         element = self._parser.parse(spec)
         if not element:
-            self._log.error("Invalid compound spec: %r" % spec)
+            self._log.error("Invalid compound spec: %r" % spec, exc_info=True)
             raise SyntaxError("Invalid compound spec: %r" % spec)
         elements_.Alternative.__init__(self, (element,), name=name,
                                        default=default)
@@ -293,7 +293,7 @@ class Compound(elements_.Alternative):
             try:
                 value = self._value_func(node, extras)
             except Exception, e:
-                self._log.warning("Exception from value_func: %s" % e)
+                self._log.warning("Exception from value_func: %s" % e, exc_info=True)
                 raise
             return value
         elif self._value is not None:

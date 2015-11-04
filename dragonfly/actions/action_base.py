@@ -86,7 +86,7 @@ class ActionBase(object):
             if self._execute(data) == False:
                 raise ActionError(str(self))
         except ActionError, e:
-            self._log_exec.error("Execution failed: %s" % e)
+            self._log_exec.error("Execution failed: %s" % e, exc_info=True)
             return False
         return True
 

@@ -118,7 +118,7 @@ class Text(DynStrActionBase):
                 index = word.find("Test")
                 capitalize = True
                 if index == -1:
-                    self._log.error("Failed to autoformat.")
+                    self._log.error("Failed to autoformat.", exc_info=True)
                     return False
             else:
                 capitalize = False

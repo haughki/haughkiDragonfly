@@ -57,7 +57,7 @@ class CommandModule(object):
         try:
             execfile(self._path, namespace)
         except Exception, e:
-            self._log.error("%s: Error loading module: %s" % (self, e))
+            self._log.error("%s: Error loading module: %s" % (self, e), exc_info=True)
             self._loaded = False
             return
 

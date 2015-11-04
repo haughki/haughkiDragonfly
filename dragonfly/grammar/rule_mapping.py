@@ -226,5 +226,4 @@ class MappingRule(Rule):
         if isinstance(value, ActionBase):
             value.execute(extras)
         elif self._log_proc:
-            self._log_proc.warning("%s: mapping value is not an action,"
-                                   " cannot execute." % self)
+            self._log_proc.warning("%s: mapping value is not an action, cannot execute." % self, exc_info=True)

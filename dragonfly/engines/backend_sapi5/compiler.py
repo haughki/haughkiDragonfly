@@ -107,7 +107,7 @@ class Sapi5Compiler(CompilerBase):
         # Below is for debugging purposes only.
         stack = [(collection_iter(rule_handle.InitialState.Transitions), None)]
         while stack:
-            self._log.error("%s: Stack len %s." % (self, len(stack)))
+            self._log.error("%s: Stack len %s." % (self, len(stack)), exc_info=True)
             try:
                 t = stack[-1][0].next()
             except StopIteration:
@@ -120,11 +120,11 @@ class Sapi5Compiler(CompilerBase):
             else:
                 ts = [j for i,j in stack[1:]] + [t]
                 path = [j.Text or j.Rule and ("<%s>" % j.Rule.Name) for j in ts]
-                self._log.error("%s: path %r." % (self, path))
+                self._log.error("%s: path %r." % (self, path), exc_info=True)
             if len(stack) > 100:
                 ts = [j for i,j in stack[1:]] + [t]
                 path = ["%r[%s]" % (j.Text,j.NextState) or j.Rule and ("<%s>" % j.Rule.Name) for j in ts]
-                self._log.error("%s: path %r." % (self, path))
+                self._log.error("%s: path %r." % (self, path), exc_info=True)
                 break
 
 
