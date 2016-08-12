@@ -204,6 +204,7 @@ class MappingRule(Rule):
                 extras[name] = element.default
 
         # Call the method to do the actual processing.
+        super(MappingRule, self).process_recognition(node)
         self._process_recognition(item_value, extras)
 
     def _process_recognition(self, value, extras):

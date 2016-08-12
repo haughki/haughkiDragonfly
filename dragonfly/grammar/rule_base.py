@@ -316,7 +316,7 @@ class Rule(object):
                functionality when a top-level rule is recognized.
 
         """
-        pass
+        print node.words()
 
 
 class ImportedRule(Rule):

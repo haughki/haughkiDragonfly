@@ -148,6 +148,7 @@ class CompoundRule(Rule):
                 extras[name] = element.default
 
         # Call the method to do the actual processing.
+        super(CompoundRule, self).process_recognition(node)
         self._process_recognition(node, extras)
 
     def _process_recognition(self, node, extras):
