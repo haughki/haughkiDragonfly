@@ -210,6 +210,8 @@ class Key(DynStrActionBase):
     _modifier_prefix_delimiter = "-"
     _modifier_prefix_characters = {
         'a': typeables["alt"],
+        'g': typeables["altgr"],
+        'r': typeables["rcontrol"],
         'c': typeables["control"],
         's': typeables["shift"],
         'w': typeables["win"],

@@ -3,18 +3,18 @@
 # (c) Copyright 2007, 2008 by Christo Butcher
 # Licensed under the LGPL.
 #
-#   Dragonfly is free software: you can redistribute it and/or modify it 
-#   under the terms of the GNU Lesser General Public License as published 
-#   by the Free Software Foundation, either version 3 of the License, or 
+#   Dragonfly is free software: you can redistribute it and/or modify it
+#   under the terms of the GNU Lesser General Public License as published
+#   by the Free Software Foundation, either version 3 of the License, or
 #   (at your option) any later version.
 #
-#   Dragonfly is distributed in the hope that it will be useful, but 
-#   WITHOUT ANY WARRANTY; without even the implied warranty of 
-#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU 
+#   Dragonfly is distributed in the hope that it will be useful, but
+#   WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 #   Lesser General Public License for more details.
 #
-#   You should have received a copy of the GNU Lesser General Public 
-#   License along with Dragonfly.  If not, see 
+#   You should have received a copy of the GNU Lesser General Public
+#   License along with Dragonfly.  If not, see
 #   <http://www.gnu.org/licenses/>.
 #
 
@@ -76,6 +76,8 @@ class Keyboard(object):
     shift_code =    win32con.VK_SHIFT
     ctrl_code =     win32con.VK_CONTROL
     alt_code =      win32con.VK_MENU
+    ralt_code =      win32con.VK_RMENU
+    rctrl_code =      win32con.VK_RCONTROL
 
     @classmethod
     def send_keyboard_events(cls, events):
@@ -108,32 +110,28 @@ class Keyboard(object):
 
     @classmethod
     def xget_virtual_keycode(cls, char):
-        if isinstance(char, str):
-            code = windll.user32.VkKeyScanA(c_char(char))
-        else:
-            code = windll.user32.VkKeyScanW(c_wchar(char))
-        if code == -1:
-            raise ValueError("Unknown char: %r" % char)
-
+        code, modifiers = cls.get_keycode_and_modifiers(char)
         # Construct a list of the virtual key code and modifiers.
-        codes = [code & 0x00ff]
-        if   code & 0x0100: codes.append(cls.shift_code)
-        elif code & 0x0200: codes.append(cls.ctrl_code)
-        elif code & 0x0400: codes.append(cls.alt_code)
+        codes = [code]
+        codes.extends(modifiers)
         return codes
 
     @classmethod
     def get_keycode_and_modifiers(cls, char):
+        user32 = windll.user32
+        w = user32.GetForegroundWindow()
+        tid = user32.GetWindowThreadProcessId(w, 0)
         if isinstance(char, str):
-            code = windll.user32.VkKeyScanA(c_char(char))
+            code = windll.user32.VkKeyScanExA(c_char(char), user32.GetKeyboardLayout(tid))
         else:
-            code = windll.user32.VkKeyScanW(c_wchar(char))
+            code = windll.user32.VkKeyScanExW(c_wchar(char), user32.GetKeyboardLayout(tid))
         if code == -1:
             raise ValueError("Unknown char: %r" % char)
 
         # Construct a list of the virtual key code and modifiers.
         modifiers = []
         if   code & 0x0100: modifiers.append(cls.shift_code)
+        elif code & 0x0600: modifiers = [cls.ralt_code]
         elif code & 0x0200: modifiers.append(cls.ctrl_code)
         elif code & 0x0400: modifiers.append(cls.alt_code)
         code &= 0x00ff
