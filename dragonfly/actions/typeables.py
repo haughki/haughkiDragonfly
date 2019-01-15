@@ -229,6 +229,7 @@ typeables = {
     "alt":              Typeable(code=win32con.VK_MENU, name='alt'),
     "altgr":            Typeable(code=win32con.VK_RMENU, name='altgr'),
     "rcontrol":         Typeable(code=win32con.VK_RCONTROL, name='rcontrol'),
+    "capital":          Typeable(code=win32con.VK_CAPITAL, name='capital'),
 
     # Special keys
     "escape":           Typeable(code=win32con.VK_ESCAPE, name='escape'),
